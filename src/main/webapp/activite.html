@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Activite</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//code.jquery.com/jquery-1.12.1.min.js"></script>
+    </head>
+    <body>
+        <div id='titreActivite'>
+            <span>chargement en cours...</span>
+        </div>
+        <div id='detailActivite'>
+            <span>chargement en cours...</span>
+        </div>
+        <script>
+          
+            $(function() {
+
+                $.ajax({
+                    url: './ActionServlet',
+                    type: 'POST',
+                    data: {
+                        action: 'detailActivite',
+                        idActivite: window.location.search.substring(12),
+                        //param: '[...]' // etc.
+                    },
+                    dataType: 'json'
+                })
+                .done(function(data) {
+                    var activite = data.activite;
+                    var contenuTitre = '<h1>' + activite.denomination + '</h1>';
+                    
+                    var contenuHTML = '<p> Payant : ' + (activite.payant?'Oui':'Non') + '<br /> Nombre de participants : ' + activite.nbParticipants ;
+
+                    $('#titreActivite').html(contenuTitre);
+                    $('#detailActivite').html(contenuHTML);
+
+
+                })
+                .fail(function() {
+                    $('#titreActivite').html('ERREUR de chargement');
+                    $('#detailActivite').html('ERREUR de chargement');
+                })
+                .always(function() {
+                    //
+                });
+
+            });
+
+        </script>
+    </body>
+
+</html>
